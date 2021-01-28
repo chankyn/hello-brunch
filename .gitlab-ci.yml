@@ -6,3 +6,13 @@ build-job:
     script:
         - yarn
         - yarn build
+
+test-job:
+    stage: test
+    script:
+        - echo "Test"
+
+deploy-job:
+    stage: deploy
+    script:
+        - echo "Deploy"
