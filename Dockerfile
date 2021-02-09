@@ -6,5 +6,5 @@ COPY ./ /build/
 RUN yarn build
 
 
-FROM nginx:alpine
+FROM nginx
 COPY --from=nodebuild /build/public/ /usr/share/nginx/html/

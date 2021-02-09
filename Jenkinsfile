@@ -18,11 +18,12 @@ pipeline {
         }
         stage('Security') {
             steps {
-                sh 'trivy image --format json --output trivy.json hello-brunch:latest'
+                sh 'trivy filesystem -f json -o trivy-fs.json .'
+                sh 'trivy image -f json -o trivy-image.json hello-brunch'
             }
             post {
                 always {
-                    recordIssues enabledForFailure: true, tool: trivy(pattern: 'trivy.json')
+                    recordIssues enabledForFailure: true, aggregatingResults:true, tool: trivy(pattern: 'trivy*.json')
                 }
             }
         }
