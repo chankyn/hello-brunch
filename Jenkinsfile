@@ -20,10 +20,10 @@ pipeline {
                 withDockerRegistry(credentialsId: 'gitlab-registry', url: 'http://10.250.9.2:5050/root/hello-brunch') {
                     sh "docker tag hello-brunch:latest 10.250.9.2:5050/root/hello-brunch:${TAG}"
                     sh "docker push 10.250.9.2:5050/root/hello-brunch:${TAG}"
-                }
-                sshagent(['gitlab-ssh']) {
-                    sh "git tag ${TAG}"
-                    sh "git push --tags"
+                    sshagent(['gitlab-ssh']) {
+                        sh "git tag ${TAG}"
+                        sh "git push --tags"
+                    }
                 }
             }
         }
