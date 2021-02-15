@@ -11,20 +11,11 @@ pipeline {
                 sh 'docker-compose build'
             }
         }
-        stage("Deploy") {
-            steps {
-                sh 'docker-compose up -d'
-            }
-        }
-        stage('Security') {
-            steps {
-                sh 'trivy filesystem -f json -o trivy-fs.json .'
-                sh 'trivy image -f json -o trivy-image.json hello-brunch'
-            }
-            post {
-                always {
-                    recordIssues enabledForFailure: true, aggregatingResults:true, tool: trivy(pattern: 'trivy*.json')
-                }
+
+        stage('Publish') {
+            withDockerRegistry(credentialsId: 'gitlab-registry', url: 'http://10.250.9.2:5050/root/hello-brunch') {
+                sh 'docker tag hello-brunch:latest 10.250.9.2:5050/root/hello-brunch:latest'
+                sh 'docker push 10.250.9.2:5050/root/hello-brunch'
             }
         }
     }
