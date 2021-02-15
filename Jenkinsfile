@@ -31,10 +31,8 @@ pipeline {
         }
         stage("Deploy") {
             steps {
-                withDockerRegistry(credentialsId: 'gitlab-registry-read', url: 'http://10.250.9.2:5050/root/hello-brunch') {
-                    sshagent(['deploy-ssh']) {
-                        sh "ssh -t -o 'StrictHostKeyChecking no' deploy@10.250.9.2 'docker-compose pull && docker-compose up -d'"
-                    }
+                sshagent(['deploy-ssh']) {
+                    sh "ssh -t -o 'StrictHostKeyChecking no' deploy@10.250.9.2 'docker-compose pull && docker-compose up -d'"
                 }
             }
         }
