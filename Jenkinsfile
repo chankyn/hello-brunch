@@ -5,6 +5,9 @@ pipeline {
     options {
         ansiColor('xterm')
     }
+    environment {
+        TAG = "10.250.9.2:5050/root/hello-brunch:BUILD-1.${env.BUILD_NUMBER}"
+    }
     stages {
         stage('Build') {
             steps {
@@ -15,8 +18,8 @@ pipeline {
         stage('Publish') {
             steps {
                 withDockerRegistry(credentialsId: 'gitlab-registry', url: 'http://10.250.9.2:5050/root/hello-brunch') {
-                    sh 'docker tag hello-brunch:latest 10.250.9.2:5050/root/hello-brunch:latest'
-                    sh 'docker push 10.250.9.2:5050/root/hello-brunch'
+                    sh "docker tag hello-brunch:latest ${TAG}"
+                    sh "docker push ${TAG}"
                 }
             }
         }
